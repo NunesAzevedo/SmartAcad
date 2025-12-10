@@ -20,27 +20,27 @@ class Atividade:
 
 
 class AtividadeDisciplina:
-    def __init__(self, nota: double, peso: double, status: StatusAtividade, atividade: Atividade):
+    def __init__(self, nota: float, peso: float, status: StatusAtividade, atividade: Atividade):
         self._nota = nota
         self._peso = peso
         self._status: StatusAtividade = status
         self._atividade: Atividade = atividade
 
-    def registrarNota(self, nota: double) -> None:
+    def registrarNota(self, nota: float) -> None:
         # --- Implementação da funcionalidade ... ---
     
-    def atualizarPeso(self, peso:double) -> None:
+    def atualizarPeso(self, peso:float) -> None:
         # --- Implementação da funcionalidade ... ---
     
     def marcarConcluida(self) -> None:
         # --- Implementação da funcionalidade ... ---
 
 class Disciplina:
-    def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: double):
+    def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float):
         self._codigo = codigo
         self._nome = nome
         self._cargaHoraria = int(cargaHoraria)
-        self._mediaFinal = double(mediaFinal)
+        self._mediaFinal = float(mediaFinal)
         self._atividades: list[Atividade] = []
 
     def adicionarAtividades(atv: Atividade) -> None:
@@ -49,7 +49,7 @@ class Disciplina:
     def removerAtividades(atv: Atividade) -> None:
         # --- Implementação da funcionalidade ... ---
 
-    def atualizarMediaFinal(mediaFinal: double) -> None:
+    def atualizarMediaFinal(mediaFinal: float) -> None:
         # --- Implementação da funcionalidade ... ---
 
 
@@ -94,7 +94,7 @@ class Disciplina:
         Arquivo CSV -> Objeto Disciplina
         ---
         """
-        return Disciplina(linha[0], linha[1], int(linha[2]), double(linha[3]))
+        return Disciplina(linha[0], linha[1], int(linha[2]), float(linha[3]))
 
 class DisciplinaService:
     BD_DISCIPLINAS = 'disciplinas.csv'
@@ -104,6 +104,7 @@ class DisciplinaService:
         self._bdDisciplinas: dict[str, Disciplinas] = {}
         self._carregarDados() # Carrega dados do arquivo CSV
 
+    # --- Métodos Privados
     def _carregarDados(self):
         """
         Carrega o arquivo CSV para o dicionário 
@@ -128,5 +129,19 @@ class DisciplinaService:
             writer = csv.writer(csvFile)
             for disciplina in self._bdDisciplinas.values():
                 writer.writerow(disciplina.salvaDados())
+
+
+    # --- Métodos Públicos
+    def criarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
+        # --- Implementação da funcionalidade ... ---
+
+    def editarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
+        # --- Implementação da funcionalidade ... ---
+  
+    def excluirDisciplina(self, codigo: str) -> None:
+        # --- Implementação da funcionalidade ... ---
+
+    def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
+        # --- Implementação da funcionalidade ... ---
 
 
