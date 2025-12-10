@@ -1,13 +1,16 @@
 import csv
 import os
+from enum import Enum
 
-class TipoAtividade:
-    def __init__(self, tipo: str):
-        self._tipo = tipo  # tipos = {Tarefa, Trabalho, Prova}
+class TipoAtividade(Enum):
+    TAREFA = 'Tarefa'
+    TRABALHO = 'Trabalho'
+    PROVA = 'Prova'
 
-class StatusAtividade:
-    def __init__(self, status: str):
-        self._status = status # status = {Pendente, Andamento, Concluido}
+class StatusAtividade(Enum):
+    PENDENTE = 'Pendente'
+    ANDAMENTO = 'Andamento'
+    CONCLUIDO = 'Concluido'
 
 class Atividade:
     def __init__(self, nome: str, id: int, tipo: TipoAtividade):
@@ -24,13 +27,13 @@ class AtividadeDisciplina:
         self._atividade: Atividade = atividade
 
     def registrarNota(self, nota: double) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
     
     def atualizarPeso(self, peso:double) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
     
     def marcarConcluida(self) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
 
 class Disciplina:
     def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: double):
@@ -38,16 +41,16 @@ class Disciplina:
         self._nome = nome
         self._cargaHoraria = int(cargaHoraria)
         self._mediaFinal = double(mediaFinal)
-        self._atividades = []
+        self._atividades: list[Atividade] = []
 
     def adicionarAtividades(atv: Atividade) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
 
     def removerAtividades(atv: Atividade) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
 
     def atualizarMediaFinal(mediaFinal: double) -> None:
-    # --- Implementação da funcionalidade ... ---
+        # --- Implementação da funcionalidade ... ---
 
 
     # --- Getters - Permite acesso aos dados pelo DisciplinaService
@@ -60,6 +63,8 @@ class Disciplina:
     @property 
     def cargaHoraria(self): return self._cargaHoraria
 
+    @property 
+    def mediaFinal(self): return self._mediaFinal
     
     # --- Métodos de tratamento de dados em .csv
     """
@@ -108,8 +113,20 @@ class DisciplinaService:
 
         
         with open(self.BD_DISCIPLINAS, mode='r', newline='', encoding='utf-8') as csvFile:
-            
+            reader = csv.reader(csvFile)
+            for line in reader:
+                if line: # Verifica se a linah está vazia
+                    disciplina = Disciplina.carregaDados(line)
+                    self._bdDisciplinas[disciplina.codigo] = disciplina
 
-
+    
+    def _salvaDados(self):
+        """
+        Atualiza o Banco de Dados (Arquivo CSV)
+        """
+        with open(self.BD_DISCIPLINAS, mode='w', newline='', encoding='utf-8') as csvFile:
+            writer = csv.writer(csvFile)
+            for disciplina in self._bdDisciplinas.values():
+                writer.writerow(disciplina.salvaDados())
 
 
