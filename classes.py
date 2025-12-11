@@ -71,13 +71,8 @@ class Disciplina:
         """
         return [self._codigo, self._nome, self._cargaHoraria, self._mediaFinal]
 
-    # Rever esse código
-    # ---
-    # Parece ser melhor nao ter argumentos no método, e buscar o código no csv e _carregarDados
-    # os dados da linha do código
-    # ---
     @staticmethod
-    def carregaDados(linha: list):
+    def carregaDados(linha: list) -> Disciplina:
         """
         Carrega uma linha do arquivo CSV e 
         retorna um objeto "Disciplina"
@@ -137,18 +132,49 @@ class DisciplinaService:
 
 
     # --- Métodos Públicos
-    def criarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
-        # --- Implementação da funcionalidade ... ---
+    def criarDisciplina(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float) -> None:
+        if codigo in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina de codigo {codigo} ja existe!")
+            return
+
+        new_dis = Disciplina(codigo, nome, cargaHoraria, mediaFinal)
+        self._bdDisciplinas[codigo] = new_dis
+        self._salvaDados()
+        print(f"A disciplina {codigo} - {nome} foi cadastrada com sucesso")
         
+    def editarDisciplina(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float) -> None:
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
+            return
+        
+        dis = self._bdDisciplinas[codigo]
+        dis._nome = nome
+        dis._cargaHoraria = cargaHoraria
+        dis._mediaFinal = mediaFinal
 
-    def editarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
-        # --- Implementação da funcionalidade ... ---
-  
+        self._salvaDados()
+        print(f"A disciplina {codigo} - {nome} foi editada com sucesso")
+
     def excluirDisciplina(self, codigo: str) -> None:
-        # --- Implementação da funcionalidade ... ---
-
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
+            return
+        
+        dis = Disciplina(codigo, nome, cargaHoraria, mediaFinal)
+        self._bdDisciplinas.pop(codigo)
+        self._salvaDados()
+        print(f"A disciplina {codigo} - {dis._nome} foi excluida com sucesso")
+    
     def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
-        # --- Implementação da funcionalidade ... ---
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
+            return
+
+        disciplina = self._bdDisciplinas[dis._codigo]
+        disciplina._atividades.append(atv)
+        self._salvaDados()
+
+        print(f"A atividade {atv._nome} foi adicionada a disciplina {dis._codigo} - {dis._nome}")
 
 
 class MediaService:
