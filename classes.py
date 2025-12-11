@@ -45,8 +45,8 @@ class Disciplina:
     def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float):
         self._codigo = codigo
         self._nome = nome
-        self._cargaHoraria = int(cargaHoraria)
-        self._mediaFinal = float(mediaFinal)
+        self._cargaHoraria: int = cargaHoraria
+        self._mediaFinal: float = mediaFinal
         self._atividades: list[Atividade] = []
 
     def adicionarAtividades(self, atv: Atividade) -> None:
@@ -86,7 +86,7 @@ class Disciplina:
         Arquivo CSV -> Objeto Disciplina
         ---
         """
-        return Disciplina(linha[0], linha[1], int(linha[2]), float(linha[3]))
+        return Disciplina(linha[0], linha[1], linha[2], linha[3])
 
     # --- Getters - Permite acesso aos dados pelos objetos do tipo Service
     @property
@@ -118,6 +118,7 @@ class DisciplinaService:
     def _carregarDados(self):
         """
         Carrega o arquivo CSV para o dicionário
+        CSV -> Dicionário
         """
         if not os.path.exists(self.BD_DISCIPLINAS):
             return
@@ -133,7 +134,8 @@ class DisciplinaService:
 
     def _salvaDados(self):
         """
-        Atualiza o Banco de Dados (Arquivo CSV)
+        Salva o Banco de Dados no arquivo CSV
+        Dicionário -> CSV
         """
         with open(
             self.BD_DISCIPLINAS, mode="w", newline="", encoding="utf-8"
@@ -146,6 +148,7 @@ class DisciplinaService:
     def criarDisciplina(
         self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float
     ) -> None:
+        codigo = str(codigo).strip()
         if codigo in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina de codigo {codigo} ja existe!")
             return
@@ -158,6 +161,7 @@ class DisciplinaService:
     def editarDisciplina(
         self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float
     ) -> None:
+        codigo = str(codigo).strip()
         if codigo not in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina {codigo} nao existe!")
             return
@@ -171,15 +175,15 @@ class DisciplinaService:
         print(f"A disciplina {codigo} - {nome} foi editada com sucesso")
 
     def excluirDisciplina(self, codigo: str) -> None:
+        codigo = str(codigo).strip()
         if codigo not in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina {codigo} nao existe!")
             return
 
+        nome = self._bdDisciplinas[codigo]._nome
         self._bdDisciplinas.pop(codigo)
         self._salvaDados()
-        print(
-            f"A disciplina {codigo} - {self._bdDisciplinas[codigo]._nome} foi excluida com sucesso"
-        )
+        print(f"A disciplina {codigo} - {nome} foi excluida com sucesso")
 
     def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
         if dis._codigo not in self._bdDisciplinas:
@@ -201,7 +205,8 @@ class MediaService:
 
     def calcularMediaTipo(self):
         # --- Implementação da funcionalidade ... ---
+        print("Implementacao nao realizada")
 
     def calcularMediaFinal(self):
         # --- Implementação da funcionalidade ... ---
-
+        print("Implementacao nao realizada")
