@@ -27,13 +27,13 @@ class AtividadeDisciplina:
         self._atividade: Atividade = atividade
 
     def registrarNota(self, nota: float) -> None: 
-        # --- Implementação da funcionalidade ... ---
+        self._nota = nota
     
     def atualizarPeso(self, peso:float) -> None:
-        # --- Implementação da funcionalidade ... ---
+        self._peso = peso
     
     def marcarConcluida(self) -> None:
-        # --- Implementação da funcionalidade ... ---
+        self._status.CONCLUIDO
 
 class Disciplina:
     def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float):
