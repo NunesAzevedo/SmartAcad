@@ -15,14 +15,14 @@ class StatusAtividade(Enum):
 class Atividade:
     def __init__(self, nome: str, id: int, tipo: TipoAtividade):
         self._nome = nome
-        self._id = id
+        self._id = int(id)
         self._tipo: TipoAtividade = tipo
 
 
 class AtividadeDisciplina:
     def __init__(self, nota: float, peso: float, status: StatusAtividade, atividade: Atividade):
-        self._nota = nota
-        self._peso = peso
+        self._nota = float(nota)
+        self._peso = float(peso)
         self._status: StatusAtividade = status
         self._atividade: Atividade = atividade
 
@@ -44,14 +44,13 @@ class Disciplina:
         self._atividades: list[Atividade] = []
 
     def adicionarAtividades(self, atv: Atividade) -> None:
-        # --- Implementação da funcionalidade ... ---
+        self._atividades.append(atv)
 
     def removerAtividades(self, atv: Atividade) -> None:
-        # --- Implementação da funcionalidade ... ---
+        self._atividades.remove(atv)    
 
     def atualizarMediaFinal(self, mediaFinal: float) -> None:
-        # --- Implementação da funcionalidade ... ---
-   
+        self._mediaFinal = mediaFinal 
 
     # --- Métodos de tratamento de dados em .csv
     """
@@ -72,6 +71,11 @@ class Disciplina:
         """
         return [self._codigo, self._nome, self._cargaHoraria, self._mediaFinal]
 
+    # Rever esse código
+    # ---
+    # Parece ser melhor nao ter argumentos no método, e buscar o código no csv e _carregarDados
+    # os dados da linha do código
+    # ---
     @staticmethod
     def carregaDados(linha: list):
         """
@@ -84,7 +88,7 @@ class Disciplina:
         return Disciplina(linha[0], linha[1], int(linha[2]), float(linha[3]))
 
 
-    # --- Getters - Permite acesso aos dados pelo DisciplinaService
+    # --- Getters - Permite acesso aos dados pelos objetos do tipo Service
     @property 
     def codigo(self): return self._codigo
 
@@ -135,6 +139,7 @@ class DisciplinaService:
     # --- Métodos Públicos
     def criarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
         # --- Implementação da funcionalidade ... ---
+        
 
     def editarDisciplina(self, codigo: str, nome: str, cargaHoraria: int) -> None:
         # --- Implementação da funcionalidade ... ---
