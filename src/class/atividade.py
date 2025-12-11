@@ -26,7 +26,7 @@ class AtividadeDisciplina:
         self._status: StatusAtividade = status
         self._atividade: Atividade = atividade
 
-    def registrarNota(self, nota: float) -> None:
+    def registrarNota(self, nota: float) -> None: 
         # --- Implementação da funcionalidade ... ---
     
     def atualizarPeso(self, peso:float) -> None:
@@ -43,29 +43,16 @@ class Disciplina:
         self._mediaFinal = float(mediaFinal)
         self._atividades: list[Atividade] = []
 
-    def adicionarAtividades(atv: Atividade) -> None:
+    def adicionarAtividades(self, atv: Atividade) -> None:
         # --- Implementação da funcionalidade ... ---
 
-    def removerAtividades(atv: Atividade) -> None:
+    def removerAtividades(self, atv: Atividade) -> None:
         # --- Implementação da funcionalidade ... ---
 
-    def atualizarMediaFinal(mediaFinal: float) -> None:
+    def atualizarMediaFinal(self, mediaFinal: float) -> None:
         # --- Implementação da funcionalidade ... ---
+   
 
-
-    # --- Getters - Permite acesso aos dados pelo DisciplinaService
-    @property 
-    def codigo(self): return self._codigo
-
-    @property 
-    def nome(self): return self._nome
-
-    @property 
-    def cargaHoraria(self): return self._cargaHoraria
-
-    @property 
-    def mediaFinal(self): return self._mediaFinal
-    
     # --- Métodos de tratamento de dados em .csv
     """
     O objeto "Disciplina" terá seus dados salvos 
@@ -96,6 +83,22 @@ class Disciplina:
         """
         return Disciplina(linha[0], linha[1], int(linha[2]), float(linha[3]))
 
+
+    # --- Getters - Permite acesso aos dados pelo DisciplinaService
+    @property 
+    def codigo(self): return self._codigo
+
+    @property 
+    def nome(self): return self._nome
+
+    @property 
+    def cargaHoraria(self): return self._cargaHoraria
+
+    @property 
+    def mediaFinal(self): return self._mediaFinal
+
+
+
 class DisciplinaService:
     BD_DISCIPLINAS = 'disciplinas.csv'
 
@@ -111,7 +114,6 @@ class DisciplinaService:
         """
         if not os.path.exists(self.BD_DISCIPLINAS):
             return 
-
         
         with open(self.BD_DISCIPLINAS, mode='r', newline='', encoding='utf-8') as csvFile:
             reader = csv.reader(csvFile)
@@ -120,7 +122,6 @@ class DisciplinaService:
                     disciplina = Disciplina.carregaDados(line)
                     self._bdDisciplinas[disciplina.codigo] = disciplina
 
-    
     def _salvaDados(self):
         """
         Atualiza o Banco de Dados (Arquivo CSV)
@@ -143,5 +144,17 @@ class DisciplinaService:
 
     def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
         # --- Implementação da funcionalidade ... ---
+
+
+class MediaService:
+    def __init__(self, dis: Disciplina):
+        self._dis: Disciplina = dis
+
+    def calcularMediaTipo(self):
+        # --- Implementação da funcionalidade ... ---
+
+    def calcularMediaFinal(self):
+        # --- Implementação da funcionalidade ... ---
+
 
 
