@@ -49,11 +49,15 @@ class Disciplina:
         self._mediaFinal: float = mediaFinal
         self._atividades: list[Atividade] = []
 
-    def adicionarAtividades(self, atv: Atividade) -> None:
+    def adicionarAtividade(self, atv: Atividade) -> None:
         self._atividades.append(atv)
 
-    def removerAtividades(self, atv: Atividade) -> None:
-        self._atividades.remove(atv)
+    def removerAtividade(self, id: int) -> None:
+        for atv in self._atividades:
+            if atv._id == id:
+                self._atividades.remove(atv)
+                return
+                
 
     def atualizarMediaFinal(self, mediaFinal: float) -> None:
         self._mediaFinal = mediaFinal
@@ -185,7 +189,7 @@ class DisciplinaService:
         self._salvaDados()
         print(f"A disciplina {codigo} - {nome} foi excluida com sucesso")
 
-    def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
+    def associarAtividade(self, dis: Disciplina, atv: Atividade) -> None:
         if dis._codigo not in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina {dis._codigo} nao existe!")
             return
