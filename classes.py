@@ -132,7 +132,7 @@ class DisciplinaService:
         ) as csvFile:
             reader = csv.reader(csvFile)
             for line in reader:
-                if line:  # Verifica se a linah está vazia
+                if line:  # Verifica se a linha está vazia
                     disciplina = Disciplina.carregaDados(line)
                     self._bdDisciplinas[disciplina.codigo] = disciplina
 
