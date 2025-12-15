@@ -42,21 +42,21 @@ class AtividadeDisciplina:
 
 
 class Disciplina:
-    def __init__(self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float):
+    def __init__(self, codigo: str, nome: str, cargaHoraria: int):
         self._codigo = codigo
         self._nome = nome
         self._cargaHoraria: int = cargaHoraria
-        self._mediaFinal: float = mediaFinal
-        self._atividades: list[Atividade] = []
+        self._mediaFinal: float = 0.0
+        self._atividades: list[AtividadeDisciplina] = []
 
-    def adicionarAtividades(self, atv: Atividade) -> None:
+    def adicionarAtividades(self, atv: AtividadeDisciplina) -> None:
         self._atividades.append(atv)
 
-    def removerAtividades(self, atv: Atividade) -> None:
+    def removerAtividades(self, atv: AtividadeDisciplina) -> None:
         self._atividades.remove(atv)
 
-    def atualizarMediaFinal(self, mediaFinal: float) -> None:
-        self._mediaFinal = mediaFinal
+    def atualizarMediaFinal(self) -> None:
+        self._mediaFinal = MediaService(self).calcularMediaFinal()
 
     # --- Métodos de tratamento de dados em .csv
     """
@@ -207,6 +207,18 @@ class MediaService:
         # --- Implementação da funcionalidade ... ---
         print("Implementacao nao realizada")
 
-    def calcularMediaFinal(self):
-        # --- Implementação da funcionalidade ... ---
-        print("Implementacao nao realizada")
+    def calcularMediaFinal(self) -> float:
+        somaNotas = 0
+        somaPesos = 0
+        atvividades = self._dis._atividades
+
+        for atv in atvividades:
+            somaNotas += atv._nota * atv._peso
+            somaPesos += atv._peso
+
+        # Proteção para divisão por 0
+        if somaPesos == 0.0:
+            return 0.0
+
+        media = somaNotas / somaPesos
+        return media
