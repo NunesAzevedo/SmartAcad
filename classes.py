@@ -16,12 +16,27 @@ class StatusAtividade(Enum):
 
 
 class Atividade:
-    def __init__(self, nome: str, id: int, tipo: TipoAtividade):
-        self._nome = nome
-        self._id = int(id)
+    def __init__(
+        self,
+        nome: str,
+        id: int,
+        tipo: TipoAtividade,
+        status: StatusAtividade = StatusAtividade.PENDENTE,
+    ):
+        self._nome: str = nome
+        self._id: int = id
         self._tipo: TipoAtividade = tipo
+        self._nota: float = 0.0
+        self._status: StatusAtividade = status
+
+    def registrarNota(self, nota: float) -> None:
+        self._nota = nota
+
+    def atualizarStatus(self, status: StatusAtividade) -> None:
+        self._status = status
 
 
+"""
 class AtividadeDisciplina:
     def __init__(
         self, nota: float, peso: float, status: StatusAtividade, atividade: Atividade
@@ -39,6 +54,7 @@ class AtividadeDisciplina:
 
     def marcarConcluida(self) -> None:
         self._status.CONCLUIDO
+"""
 
 
 class Disciplina:
@@ -46,16 +62,29 @@ class Disciplina:
         self._codigo = codigo
         self._nome = nome
         self._cargaHoraria: int = cargaHoraria
-        self._mediaFinal: float = 0.0
+        self._pesos: list[float] = []
         self._atividades: list[AtividadeDisciplina] = []
+        self._mediaTarefa: float = 0.0
+        self._mediaTrabalho: float = 0.0
+        self._mediaProva: float = 0.0
+        self._mediaFinal: float = 0.0
 
-    def adicionarAtividades(self, atv: AtividadeDisciplina) -> None:
+    def adicionarAtividade(self, atv: Atividade) -> None:
         self._atividades.append(atv)
 
-    def removerAtividades(self, atv: AtividadeDisciplina) -> None:
-        self._atividades.remove(atv)
+    def atualizarPesos(self, listaPeso: list[float]) -> None:
+        self._pesos = listaPeso
 
-    def atualizarMediaFinal(self) -> None:
+    def atualizarMediaTarefa(self, mediaTarefa: float) -> None:
+        """Implementação da funcionalidade..."""
+
+    def atualizarMediaTrabalho(self, mediaTrabalho: float) -> None:
+        """Implementação da funcionalidade..."""
+
+    def atualizarMediaProva(self, mediaProva: float) -> None:
+        """Implementação da funcionalidade..."""
+
+    def atualizarMediaFinal(self, mediaFinal: float) -> None:
         self._mediaFinal = MediaService(self).calcularMediaFinal()
 
     # --- Métodos de tratamento de dados em .csv
@@ -88,25 +117,8 @@ class Disciplina:
         """
         return Disciplina(linha[0], linha[1], linha[2], linha[3])
 
-    # --- Getters - Permite acesso aos dados pelos objetos do tipo Service
-    @property
-    def codigo(self):
-        return self._codigo
 
-    @property
-    def nome(self):
-        return self._nome
-
-    @property
-    def cargaHoraria(self):
-        return self._cargaHoraria
-
-    @property
-    def mediaFinal(self):
-        return self._mediaFinal
-
-
-class DisciplinaService:
+class Control:
     BD_DISCIPLINAS = "disciplinas.csv"
 
     def __init__(self):
@@ -114,8 +126,7 @@ class DisciplinaService:
         self._bdDisciplinas: dict[str, Disciplina] = {}
         self._carregarDados()  # Carrega dados do arquivo CSV
 
-    # --- Métodos Privados
-    def _carregarDados(self):
+    def carregarDados(self) -> None:
         """
         Carrega o arquivo CSV para o dicionário
         CSV -> Dicionário
@@ -132,7 +143,7 @@ class DisciplinaService:
                     disciplina = Disciplina.carregaDados(line)
                     self._bdDisciplinas[disciplina.codigo] = disciplina
 
-    def _salvaDados(self):
+    def salvaDados(self) -> None:
         """
         Salva o Banco de Dados no arquivo CSV
         Dicionário -> CSV
@@ -144,22 +155,22 @@ class DisciplinaService:
             for disciplina in self._bdDisciplinas.values():
                 writer.writerow(disciplina.salvaDados())
 
-    # --- Métodos Públicos
     def criarDisciplina(
-        self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float
+        self, codigo: str, nome: str, cargaHoraria: int, pesos: list[float]
     ) -> None:
         codigo = str(codigo).strip()
         if codigo in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina de codigo {codigo} ja existe!")
             return
 
-        new_dis = Disciplina(codigo, nome, cargaHoraria, mediaFinal)
+        new_dis = Disciplina(codigo, nome, cargaHoraria)
+        new_dis._pesos = pesos
         self._bdDisciplinas[codigo] = new_dis
         self._salvaDados()
         print(f"A disciplina {codigo} - {nome} foi cadastrada com sucesso")
 
     def editarDisciplina(
-        self, codigo: str, nome: str, cargaHoraria: int, mediaFinal: float
+        self, codigo: str, nome: str, cargaHoraria: int, pesos: list[float]
     ) -> None:
         codigo = str(codigo).strip()
         if codigo not in self._bdDisciplinas:
@@ -169,7 +180,7 @@ class DisciplinaService:
         dis = self._bdDisciplinas[codigo]
         dis._nome = nome
         dis._cargaHoraria = cargaHoraria
-        dis._mediaFinal = mediaFinal
+        dis._pesos = pesos
 
         self._salvaDados()
         print(f"A disciplina {codigo} - {nome} foi editada com sucesso")
@@ -185,36 +196,63 @@ class DisciplinaService:
         self._salvaDados()
         print(f"A disciplina {codigo} - {nome} foi excluida com sucesso")
 
-    def associarAtividade(self, dis: Disciplina, atv: Atividade, peso: float) -> None:
-        if dis._codigo not in self._bdDisciplinas:
-            print(f"[ERRO]: A disciplina {dis._codigo} nao existe!")
+    def associarAtividade(self, codigo: str, atv: Atividade) -> None:
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
             return
 
-        disciplina = self._bdDisciplinas[dis._codigo]
-        disciplina._atividades.append(atv)
+        dis = self._bdDisciplinas[codigo]
+        dis._atividades.append(atv)
         self._salvaDados()
 
         print(
-            f"A atividade {atv._nome} foi adicionada a disciplina {dis._codigo} - {dis._nome}"
+            f"A atividade {atv._nome} foi adicionada a disciplina {codigo} - {dis._nome}"
         )
 
+    def calcularMediaTipo(self, codigo: str, tipo: TipoAtividade) -> None:
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
+            return
 
-class MediaService:
-    def __init__(self, dis: Disciplina):
-        self._dis: Disciplina = dis
+        somaNotas = 0
+        dis = self._bdDisciplinas[codigo]
+        atividades = dis._atividades
 
-    def calcularMediaTipo(self):
-        # --- Implementação da funcionalidade ... ---
-        print("Implementacao nao realizada")
+        for atv in atvividades:
+            if atv._tipo == tipo:
+                somaNotas += atv._nota
 
-    def calcularMediaFinal(self) -> float:
+        if tipo == TipoAtividade.TAREFA:
+            dis.atualizarMediaTarefa(media)
+        elif tipo == TipoAtividade.TRABALHO:
+            dis.atualizarMediaTrabalho(media)
+        elif tipo == TipoAtividade.PROVA:
+            dis.atualizarMediaProva(media)
+
+    def calcularMediaFinal(self, codigo: str) -> None:
+        if codigo not in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina {codigo} nao existe!")
+            return
+
         somaNotas = 0
         somaPesos = 0
         atvividades = self._dis._atividades
 
-        for atv in atvividades:
-            somaNotas += atv._nota * atv._peso
-            somaPesos += atv._peso
+        dis = self._bdDisciplinas[codigo]
+
+        pesoTarefa = dis._pesos[0]
+        pesoTrabalho = dis._pesos[1]
+        pesoProva = dis._pesos[2]
+
+        somaPesos = pesoTarefa + pesoTrabalho + pesoProva
+
+        mediaFinal = dis.mediaTarefa * pesoTarefa
+        mediaFinal += dis.mediaTrabalho * pesoTrabalho
+        mediaFinal += dis.mediaProva * pesoProva
+
+        mediaFinal = mediaFinal / somaPesos
+
+        dis.atualizarMediaFinal(mediaFinal)
 
         # Proteção para divisão por 0
         if somaPesos == 0.0:
