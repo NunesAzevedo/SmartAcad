@@ -36,27 +36,6 @@ class Atividade:
         self._status = status
 
 
-"""
-class AtividadeDisciplina:
-    def __init__(
-        self, nota: float, peso: float, status: StatusAtividade, atividade: Atividade
-    ):
-        self._nota = float(nota)
-        self._peso = float(peso)
-        self._status: StatusAtividade = status
-        self._atividade: Atividade = atividade
-
-    def registrarNota(self, nota: float) -> None:
-        self._nota = nota
-
-    def atualizarPeso(self, peso: float) -> None:
-        self._peso = peso
-
-    def marcarConcluida(self) -> None:
-        self._status.CONCLUIDO
-"""
-
-
 class Disciplina:
     def __init__(self, codigo: str, nome: str, cargaHoraria: int):
         self._codigo = codigo
