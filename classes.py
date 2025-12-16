@@ -134,6 +134,14 @@ class Control:
             for disciplina in self._bdDisciplinas.values():
                 writer.writerow(disciplina.salvaDados())
 
+    def validaDisciplina(self, codigo: str) -> bool:
+        codigo = str(codigo).strip()
+        if codigo in self._bdDisciplinas:
+            print(f"[ERRO]: A disciplina de codigo {codigo} ja existe!")
+            return False
+        else:
+            return True
+
     def criarDisciplina(
         self, codigo: str, nome: str, cargaHoraria: int, pesos: list[float]
     ) -> None:

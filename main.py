@@ -14,15 +14,38 @@ def main():
     elif opc == 1:  # Cadastrar Disciplina
         inter.cadastraDisciplina()
         codigo = input(str("Insira o codigo da disciplina a ser cadastrada"))
+        
+        # Verifica se o código da disciplina já foi cadastrado no sistema
+        isCodigoValid = cls.Control().validaDisciplina(codigo)
+        if !(isCodigoValid):
+            inter.erro()
+            return
+       
+        
+        inter.inserirDadosDisciplina()
+        nome = input(str("Nome: "))
+        cargaHoraria = input(int("Carga Horaria: "))
+        pesoTarefa = input(float("Peso da Tarefa: "))
+        pesoTrabalho = input(float("Peso do Trabalho: "))
+        pesoProva = input(float("Peso da Prova: "))
+        pesos = {pesoTarefa, pesoTrabalho, pesoProva}
+        cls.Control().criarDisciplina(codigo, nome, cargaHoraria, pesos)
 
+        
 
 class Interface:
     def __init__(self): ...
 
-    def bemVindo():
+    def bemVindo(self):
         print("##################################")
         print("# Seja Bem-vindo(a) ao SmartAcad #")
         print("##################################")
+
+    def erro(self):
+        print("===================================")
+        print("Ocorreu um erro, tente novamente...")
+        print("===================================")
+
 
     def selecionaOpcao(self):
         print("====================")
@@ -40,25 +63,35 @@ class Interface:
         print("Obrigado por usar a SmartAcad!")
         print("##############################")
 
-    def cadastraDisciplina():
+    def cadastraDisciplina(self):
         print("##############################")
         print("#   Cadastro de Disciplina   #")
         print("##############################")
 
-    def editaDisciplina():
+    def editaDisciplina(self):
         print("##############################")
         print("#    Edicao de Disciplina    #")
         print("##############################")
 
-    def excluiDisciplina():
+    def excluiDisciplina(self):
         print("##############################")
         print("#   Exclusao de Disciplina   #")
         print("##############################")
 
-    def associaAtividade():
+    def associaAtividade(self):
         print("##############################")
         print("#  Associacao de Atividade   #")
         print("##############################")
+
+
+    def inserirDadosDisciplina(self):
+        print("==============================================")
+        print("Insira os dados da Disciplina a ser cadastrada")
+        print("==============================================")
+    
+
+
+
 
 
 if __name__ == "__main__":
