@@ -2,12 +2,63 @@ import classes as cls
 
 
 def main():
-    # cls.DisciplinaService().criarDisciplina("111", "POO", 120, 9.5)
-    cls.DisciplinaService().criarDisciplina("123", "Calculo I", 120, 9.5)
-    cls.DisciplinaService().criarDisciplina("SMA178", "Calculo II", 120, 8.7)
-    cls.DisciplinaService().criarDisciplina("SCC-7897", "ICC 1", 180, 10.0)
-    # cls.DisciplinaService().editarDisciplina("123", "Calculo I", 120, 9.8)
-    # cls.DisciplinaService().excluirDisciplina("123")
+    inter = Interface()
+
+    inter.bemVindo()
+    inter.selecionaOpcao()
+    opc = input(int("Operacao selecionada: "))
+
+    if opc == 0:  # Cancelar Operação
+        inter.operacaoCancelada()
+        return
+    elif opc == 1:  # Cadastrar Disciplina
+        inter.cadastraDisciplina()
+        codigo = input(str("Insira o codigo da disciplina a ser cadastrada"))
+
+
+class Interface:
+    def __init__(self): ...
+
+    def bemVindo():
+        print("##################################")
+        print("# Seja Bem-vindo(a) ao SmartAcad #")
+        print("##################################")
+
+    def selecionaOpcao(self):
+        print("====================")
+        print("Selecione uma opcao:")
+        print("====================")
+
+        print("[0] - Cancelar Operação")
+        print("[1] - Cadastrar Disciplina")
+        print("[2] - Editar Disciplina")
+        print("[3] - Excluir Disciplina")
+        print("[4] - Associar atividade a uma Disciplina")
+
+    def operacaoCancelada(self):
+        print("##############################")
+        print("Obrigado por usar a SmartAcad!")
+        print("##############################")
+
+    def cadastraDisciplina():
+        print("##############################")
+        print("#   Cadastro de Disciplina   #")
+        print("##############################")
+
+    def editaDisciplina():
+        print("##############################")
+        print("#    Edicao de Disciplina    #")
+        print("##############################")
+
+    def excluiDisciplina():
+        print("##############################")
+        print("#   Exclusao de Disciplina   #")
+        print("##############################")
+
+    def associaAtividade():
+        print("##############################")
+        print("#  Associacao de Atividade   #")
+        print("##############################")
 
 
 if __name__ == "__main__":
