@@ -99,10 +99,11 @@ class Disciplina:
 
 class Control:
     BD_DISCIPLINAS = "disciplinas.csv"
+    BD_ATIVIDADES = "atividades.csv"
 
     def __init__(self):
-        # Dicionário com código da disciplina como key
         self._bdDisciplinas: dict[str, Disciplina] = {}
+        self._bdAtividades: dict[str, Atividade] = {}
         self._carregarDados()  # Carrega dados do arquivo CSV
 
     def carregarDados(self) -> None:
@@ -183,7 +184,7 @@ class Control:
         self._salvaDados()
         print(f"A disciplina {codigo} - {nome} foi excluida com sucesso")
 
-    def associarAtividade(self, codigo: str, atv: Atividade) -> None:
+    def associarAtividade(self, codigo: str, idAtv: int) -> None:
         if codigo not in self._bdDisciplinas:
             print(f"[ERRO]: A disciplina {codigo} nao existe!")
             return

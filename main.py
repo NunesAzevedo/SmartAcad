@@ -73,6 +73,11 @@ def main():
             inter.erro()
             return
 
+        inter.inserirDadosAtividade()
+
+        idAtv = input(id("Insira a ID da Atividade"))
+        cls.Control().associarAtividade(codigo, idAtv)
+
 
 class Interface:
     def __init__(self): ...
