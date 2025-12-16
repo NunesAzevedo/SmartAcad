@@ -31,6 +31,42 @@ def main():
         pesos = {pesoTarefa, pesoTrabalho, pesoProva}
         cls.Control().criarDisciplina(codigo, nome, cargaHoraria, pesos)
 
+    elif opc == 2: # Editar Disciplina
+        inter.editaDisciplina()
+    
+        codigo = input(str("Insira o codigo da disciplina a ser editada"))
+        
+        # Verifica se o código da disciplina já foi cadastrado no sistema
+        isCodigoValid = cls.Control().validaDisciplina(codigo)
+        if !(isCodigoValid):
+            inter.erro()
+            return
+       
+        inter.inserirDadosDisciplina()
+        nome = input(str("Nome: "))
+        cargaHoraria = input(int("Carga Horaria: "))
+        pesoTarefa = input(float("Peso da Tarefa: "))
+        pesoTrabalho = input(float("Peso do Trabalho: "))
+        pesoProva = input(float("Peso da Prova: "))
+        pesos = {pesoTarefa, pesoTrabalho, pesoProva}
+        cls.Control().editarDisciplina(codigo, nome, cargaHoraria, pesos)
+    
+    elif opc == 3: # Excluir Disciplina
+        inter.excluiDisciplina()
+    
+        codigo = input(str("Insira o codigo da disciplina a ser excluida"))
+        
+        # Verifica se o código da disciplina já foi cadastrado no sistema
+        isCodigoValid = cls.Control().validaDisciplina(codigo)
+        if !(isCodigoValid):
+            inter.erro()
+            return
+      
+        cls.Control().excluirDisciplina(codigo)
+    
+    elif opc == 4: # Associar Atividade a uma Disciplina
+        inter.associaAtividade()
+    
         
 
 class Interface:
