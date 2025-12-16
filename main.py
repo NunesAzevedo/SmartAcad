@@ -14,14 +14,13 @@ def main():
     elif opc == 1:  # Cadastrar Disciplina
         inter.cadastraDisciplina()
         codigo = input(str("Insira o codigo da disciplina a ser cadastrada"))
-        
+
         # Verifica se o código da disciplina já foi cadastrado no sistema
         isCodigoValid = cls.Control().validaDisciplina(codigo)
-        if !(isCodigoValid):
+        if not isCodigoValid:
             inter.erro()
             return
-       
-        
+
         inter.inserirDadosDisciplina()
         nome = input(str("Nome: "))
         cargaHoraria = input(int("Carga Horaria: "))
@@ -31,17 +30,17 @@ def main():
         pesos = {pesoTarefa, pesoTrabalho, pesoProva}
         cls.Control().criarDisciplina(codigo, nome, cargaHoraria, pesos)
 
-    elif opc == 2: # Editar Disciplina
+    elif opc == 2:  # Editar Disciplina
         inter.editaDisciplina()
-    
+
         codigo = input(str("Insira o codigo da disciplina a ser editada"))
-        
+
         # Verifica se o código da disciplina já foi cadastrado no sistema
         isCodigoValid = cls.Control().validaDisciplina(codigo)
-        if !(isCodigoValid):
+        if not isCodigoValid:
             inter.erro()
             return
-       
+
         inter.inserirDadosDisciplina()
         nome = input(str("Nome: "))
         cargaHoraria = input(int("Carga Horaria: "))
@@ -50,24 +49,30 @@ def main():
         pesoProva = input(float("Peso da Prova: "))
         pesos = {pesoTarefa, pesoTrabalho, pesoProva}
         cls.Control().editarDisciplina(codigo, nome, cargaHoraria, pesos)
-    
-    elif opc == 3: # Excluir Disciplina
+
+    elif opc == 3:  # Excluir Disciplina
         inter.excluiDisciplina()
-    
+
         codigo = input(str("Insira o codigo da disciplina a ser excluida"))
-        
+
         # Verifica se o código da disciplina já foi cadastrado no sistema
         isCodigoValid = cls.Control().validaDisciplina(codigo)
-        if !(isCodigoValid):
+        if not isCodigoValid:
             inter.erro()
             return
-      
+
         cls.Control().excluirDisciplina(codigo)
-    
-    elif opc == 4: # Associar Atividade a uma Disciplina
+
+    elif opc == 4:  # Associar Atividade a uma Disciplina
         inter.associaAtividade()
-    
-        
+
+        codigo = input(str("Insira o codigo da disciplina a ter atividade associada"))
+        # Verifica se o código da disciplina já foi cadastrado no sistema
+        isCodigoValid = cls.Control().validaDisciplina(codigo)
+        if not isCodigoValid:
+            inter.erro()
+            return
+
 
 class Interface:
     def __init__(self): ...
@@ -81,7 +86,6 @@ class Interface:
         print("===================================")
         print("Ocorreu um erro, tente novamente...")
         print("===================================")
-
 
     def selecionaOpcao(self):
         print("====================")
@@ -119,15 +123,15 @@ class Interface:
         print("#  Associacao de Atividade   #")
         print("##############################")
 
-
     def inserirDadosDisciplina(self):
         print("==============================================")
         print("Insira os dados da Disciplina a ser cadastrada")
         print("==============================================")
-    
 
-
-
+    def inserirDadosAtividade(self):
+        print("============================================")
+        print("Insira os dados da Atividade a ser associada")
+        print("============================================")
 
 
 if __name__ == "__main__":
